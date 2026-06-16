@@ -21,8 +21,15 @@ export class OrdersService {
     private dataSource: DataSource,
   ) {}
 
-  findAll(): Promise<Order[]> {
-    return this.ordersRepo.find({ order: { createdAt: 'DESC' } });
+  /** Admin: all orders. Customer: only their own orders. */
+  findAll(userId?: number, role?: string): Promise<Order[]> {
+    if (role === 'admin') {
+      return this.ordersRepo.find({ order: { createdAt: 'DESC' } });
+    }
+    return this.ordersRepo.find({
+      where: { userId },
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async findOne(id: number): Promise<Order> {
@@ -35,7 +42,7 @@ export class OrdersService {
 
   // We use a transaction here so that if anything fails (e.g. stock runs out
   // mid-checkout) the whole order is rolled back cleanly.
-  async createOrder(dto: CreateOrderDto): Promise<Order> {
+  async createOrder(dto: CreateOrderDto, userId: number): Promise<Order> {
     return this.dataSource.transaction(async (manager) => {
       let total = 0;
       const orderItems: OrderItem[] = [];
@@ -66,6 +73,7 @@ export class OrdersService {
       const order = manager.create(Order, {
         total: parseFloat(total.toFixed(2)),
         items: orderItems,
+        userId,
       });
 
       return manager.save(order);

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ShopPage from './pages/ShopPage';
 import CartPage from './pages/CartPage';
 import OrdersPage from './pages/OrdersPage';
@@ -7,7 +8,8 @@ import './index.css';
 
 type Page = 'shop' | 'cart' | 'orders';
 
-export default function App() {
+function AppInner() {
+  const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>('shop');
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -39,11 +41,7 @@ export default function App() {
     setCart((prev) => {
       const item = prev.find((i) => i.product.id === productId);
       if (!item) return prev;
-
-      if (item.quantity === 1) {
-        return prev.filter((i) => i.product.id !== productId);
-      }
-
+      if (item.quantity === 1) return prev.filter((i) => i.product.id !== productId);
       return prev.map((i) =>
         i.product.id === productId ? { ...i, quantity: i.quantity - 1 } : i
       );
@@ -79,6 +77,19 @@ export default function App() {
             🛒 Cart {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
           </button>
         </div>
+
+        <div className="navbar-user">
+          {isAuthenticated ? (
+            <>
+              <span className="user-pill">
+                {isAdmin ? '👑 Admin' : '👤'} {user?.email}
+              </span>
+              <button className="logout-btn" onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <span className="user-pill guest">Guest</span>
+          )}
+        </div>
       </nav>
 
       {currentPage === 'shop' && (
@@ -94,9 +105,15 @@ export default function App() {
           onCheckoutSuccess={() => setCurrentPage('orders')}
         />
       )}
-      {currentPage === 'orders' && (
-        <OrdersPage />
-      )}
+      {currentPage === 'orders' && <OrdersPage />}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppInner />
+    </AuthProvider>
   );
 }

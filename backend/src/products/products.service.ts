@@ -27,4 +27,16 @@ export class ProductsService {
     const product = this.productsRepo.create(dto);
     return this.productsRepo.save(product);
   }
+
+  async update(id: number, dto: Partial<CreateProductDto>): Promise<Product> {
+    const product = await this.findOne(id);
+    Object.assign(product, dto);
+    return this.productsRepo.save(product);
+  }
+
+  async remove(id: number): Promise<{ deleted: boolean }> {
+    await this.findOne(id); // throws 404 if not found
+    await this.productsRepo.delete(id);
+    return { deleted: true };
+  }
 }

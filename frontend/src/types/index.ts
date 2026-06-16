@@ -26,3 +26,14 @@ export interface Order {
   total: number;
   items: OrderItem[];
 }
+
+export interface User {
+  id: number;
+  email: string;
+  role: 'customer' | 'admin';
+}
+
+export interface AuthResponse {
+  access_token: string;
+  user: User;
+}
