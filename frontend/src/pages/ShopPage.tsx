@@ -9,9 +9,15 @@ interface Toast {
   type: 'success' | 'error';
 }
 
-export default function ShopPage() {
+import type { Dispatch, SetStateAction } from 'react';
+
+interface Props {
+  cart: CartItem[];
+  setCart: Dispatch<SetStateAction<CartItem[]>>;
+}
+
+export default function ShopPage({ cart, setCart }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isCheckingOut, setIsCheckingOut] = useState(false);
