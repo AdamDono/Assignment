@@ -1,4 +1,4 @@
-import { Product, Order } from '../types';
+import type { Product, Order } from '../types';
 
 const BASE_URL = 'http://localhost:3000';
 

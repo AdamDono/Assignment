@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getOrders } from '../api/client';
-import { Order } from '../types';
+import type { Order } from '../types';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);

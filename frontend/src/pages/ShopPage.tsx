@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getProducts, checkout } from '../api/client';
-import { Product, CartItem } from '../types';
+import type { Product, CartItem } from '../types';
 import ProductCard from '../components/ProductCard';
 import CartSidebar from '../components/CartSidebar';
 

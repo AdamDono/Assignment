@@ -27,10 +27,12 @@ async function seed() {
   await AppDataSource.initialize();
   console.log('Connected to database');
 
-  const repo = AppDataSource.getRepository('products');
+  // Clear existing data before seeding to avoid duplicate key or FK constraint issues
+  await AppDataSource.query('TRUNCATE TABLE "order_items" CASCADE;');
+  await AppDataSource.query('TRUNCATE TABLE "orders" CASCADE;');
+  await AppDataSource.query('TRUNCATE TABLE "products" CASCADE;');
 
-  // Clear existing products before seeding so we don't duplicate
-  await repo.clear();
+  const repo = AppDataSource.getRepository('products');
 
   for (const product of products) {
     await repo.save(repo.create(product));
