@@ -22,7 +22,7 @@ export default function OrdersPage() {
       <h1 className="section-title">Order History</h1>
 
       {orders.length === 0 ? (
-        <p className="state-message">No orders yet. Go buy something! 🛍️</p>
+        <p className="state-message">No orders yet. Go buy something!</p>
       ) : (
         orders.map((order) => (
           <div key={order.id} className="order-card">

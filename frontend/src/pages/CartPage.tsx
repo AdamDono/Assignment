@@ -156,7 +156,7 @@ export default function CartPage({
                 {isCheckingOut
                   ? 'Placing Order...'
                   : !isAuthenticated
-                  ? '🔒 Sign In to Checkout'
+                  ? 'Sign In to Checkout'
                   : 'Place Order'}
               </button>
             </div>

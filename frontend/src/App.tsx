@@ -55,7 +55,7 @@ function AppInner() {
   return (
     <div className="app-layout">
       <nav className="navbar">
-        <span className="navbar-logo">🛍️ ShopCart</span>
+        <span className="navbar-logo">Adams's Shop</span>
 
         <div className="navbar-links">
           <button

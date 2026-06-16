@@ -51,7 +51,6 @@ export default function AuthModal({ onClose, onSuccess }: Props) {
         <button className="modal-close-btn" onClick={onClose} aria-label="Close">✕</button>
 
         <div className="modal-header">
-          <span className="modal-logo">🛍️</span>
           <h2 className="modal-title">
             {tab === 'login' ? 'Welcome back' : 'Create account'}
           </h2>
