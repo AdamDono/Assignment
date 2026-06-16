@@ -34,7 +34,7 @@ export default function OrdersPage() {
                 </div>
               </div>
               <span className="order-total-badge">
-                ${Number(order.total).toFixed(2)}
+                R{Number(order.total).toFixed(2)}
               </span>
             </div>
 
@@ -52,8 +52,8 @@ export default function OrdersPage() {
                   <tr key={item.id}>
                     <td>{item.product.name}</td>
                     <td>{item.quantity}</td>
-                    <td>${Number(item.unitPrice).toFixed(2)}</td>
-                    <td>${(Number(item.unitPrice) * item.quantity).toFixed(2)}</td>
+                    <td>R{Number(item.unitPrice).toFixed(2)}</td>
+                    <td>R{(Number(item.unitPrice) * item.quantity).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>

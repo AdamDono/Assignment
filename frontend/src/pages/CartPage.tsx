@@ -71,7 +71,7 @@ export default function CartPage({
               <div className="cart-item-details">
                 <h3 className="cart-item-name">{item.product.name}</h3>
                 <p className="cart-item-desc">{item.product.description}</p>
-                <p className="cart-item-price-unit">${Number(item.product.price).toFixed(2)} each</p>
+                <p className="cart-item-price-unit">R{Number(item.product.price).toFixed(2)} each</p>
               </div>
               <div className="cart-item-actions">
                 <div className="qty-controls">
@@ -86,7 +86,7 @@ export default function CartPage({
                   </button>
                 </div>
                 <div className="cart-item-price-col">
-                  <span className="cart-item-line-total">${(Number(item.product.price) * item.quantity).toFixed(2)}</span>
+                  <span className="cart-item-line-total">R{(Number(item.product.price) * item.quantity).toFixed(2)}</span>
                   <button className="cart-item-remove-btn" onClick={() => onRemove(item.product.id)}>
                     Remove
                   </button>
@@ -102,7 +102,7 @@ export default function CartPage({
             
             <div className="summary-row">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>R{subtotal.toFixed(2)}</span>
             </div>
             <div className="summary-row">
               <span>Shipping</span>
@@ -110,14 +110,14 @@ export default function CartPage({
             </div>
             <div className="summary-row">
               <span>Estimated Tax (8%)</span>
-              <span>${tax.toFixed(2)}</span>
+              <span>R{tax.toFixed(2)}</span>
             </div>
             
             <hr className="summary-divider" />
             
             <div className="summary-row total">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>R{total.toFixed(2)}</span>
             </div>
 
             {error && <div className="checkout-error">{error}</div>}

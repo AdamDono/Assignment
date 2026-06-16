@@ -28,7 +28,7 @@ export default function CartItemRow({ item, onIncrease, onDecrease, onRemove }: 
           </button>
         </div>
 
-        <span className="cart-item-line-total">${lineTotal.toFixed(2)}</span>
+        <span className="cart-item-line-total">R{lineTotal.toFixed(2)}</span>
       </div>
 
       <button className="remove-btn" onClick={() => onRemove(item.product.id)}>

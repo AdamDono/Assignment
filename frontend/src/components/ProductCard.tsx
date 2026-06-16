@@ -16,7 +16,7 @@ export default function ProductCard({ product, cartItem, onAdd }: Props) {
       <div className="product-desc">{product.description}</div>
 
       <div className="product-footer">
-        <span className="product-price">${Number(product.price).toFixed(2)}</span>
+        <span className="product-price">R{Number(product.price).toFixed(2)}</span>
         <span className={`product-stock ${lowStock ? 'low' : ''}`}>
           {outOfStock ? 'Out of stock' : `${product.stock} left`}
         </span>

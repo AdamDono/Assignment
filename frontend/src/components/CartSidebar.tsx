@@ -47,7 +47,7 @@ export default function CartSidebar({
 
           <div className="cart-total">
             <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span>R{total.toFixed(2)}</span>
           </div>
 
           <button
