@@ -17,9 +17,9 @@ export class OrderItem {
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
-  @ManyToOne(() => Product, { eager: true })
+  @ManyToOne(() => Product, { eager: true, onDelete: 'SET NULL', nullable: true })
   @JoinColumn({ name: 'product_id' })
-  product: Product;
+  product: Product | null;
 
   @Column()
   quantity: number;

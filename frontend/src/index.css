@@ -136,6 +136,43 @@ body {
   animation: popBadge 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
+/* ─── Responsive Navbar ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .navbar-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .nav-btn {
+    flex: 1 1 auto;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .navbar-user {
+    width: 100%;
+    justify-content: center;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  .user-pill {
+    max-width: 150px;
+  }
+}
+
 @keyframes popBadge {
   0% {
     transform: scale(0.6);

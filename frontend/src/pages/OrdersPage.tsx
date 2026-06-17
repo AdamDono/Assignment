@@ -91,7 +91,7 @@ export default function OrdersPage({ showToast }: Props) {
               <tbody>
                 {order.items.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.product.name}</td>
+                    <td>{item.product?.name || 'Deleted Product'}</td>
                     <td>{item.quantity}</td>
                     <td>R{Number(item.unitPrice).toFixed(2)}</td>
                     <td>R{(Number(item.unitPrice) * item.quantity).toFixed(2)}</td>
