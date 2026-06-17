@@ -1,5 +1,10 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
+import * as bcrypt from 'bcrypt';
+import { Product } from './products/product.entity';
+import { User } from './users/user.entity';
+import { Order } from './orders/order.entity';
+import { OrderItem } from './orders/order-item.entity';
 
 config(); // load .env
 
@@ -10,7 +15,7 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ['src/**/*.entity.ts'],
+  entities: [Product, User, Order, OrderItem],
   synchronize: true,
 });
 
@@ -31,14 +36,36 @@ async function seed() {
   await AppDataSource.query('TRUNCATE TABLE "order_items" CASCADE;');
   await AppDataSource.query('TRUNCATE TABLE "orders" CASCADE;');
   await AppDataSource.query('TRUNCATE TABLE "products" CASCADE;');
+  await AppDataSource.query('TRUNCATE TABLE "users" CASCADE;');
 
-  const repo = AppDataSource.getRepository('products');
-
+  // Seed Products
+  const productRepo = AppDataSource.getRepository(Product);
   for (const product of products) {
-    await repo.save(repo.create(product));
+    await productRepo.save(productRepo.create(product));
   }
-
   console.log(`Seeded ${products.length} products`);
+
+  // Seed Users (Admin & Customer)
+  const userRepo = AppDataSource.getRepository(User);
+  
+  const adminPasswordHash = await bcrypt.hash('admin123', 10);
+  const adminUser = userRepo.create({
+    email: 'admin@shop.com',
+    password: adminPasswordHash,
+    role: 'admin',
+  });
+  await userRepo.save(adminUser);
+  console.log('Seeded admin user: admin@shop.com / admin123');
+
+  const customerPasswordHash = await bcrypt.hash('customer123', 10);
+  const customerUser = userRepo.create({
+    email: 'customer@shop.com',
+    password: customerPasswordHash,
+    role: 'customer',
+  });
+  await userRepo.save(customerUser);
+  console.log('Seeded customer user: customer@shop.com / customer123');
+
   await AppDataSource.destroy();
 }
 
