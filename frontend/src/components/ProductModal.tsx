@@ -5,7 +5,7 @@ import { apiCreateProduct, apiUpdateProduct, apiDeleteProduct } from '../api/aut
 interface Props {
   product?: Product; // undefined = create mode
   onClose: () => void;
-  onSaved: () => void;
+  onSaved: (action: 'create' | 'update' | 'delete') => void;
 }
 
 export default function ProductModal({ product, onClose, onSaved }: Props) {
@@ -30,10 +30,11 @@ export default function ProductModal({ product, onClose, onSaved }: Props) {
       };
       if (isEdit && product) {
         await apiUpdateProduct(product.id, data);
+        onSaved('update');
       } else {
         await apiCreateProduct(data);
+        onSaved('create');
       }
-      onSaved();
     } catch (err: any) {
       setError(err.message || 'Failed to save product');
     } finally {
@@ -47,7 +48,7 @@ export default function ProductModal({ product, onClose, onSaved }: Props) {
     setLoading(true);
     try {
       await apiDeleteProduct(product.id);
-      onSaved();
+      onSaved('delete');
     } catch (err: any) {
       setError(err.message || 'Failed to delete product');
     } finally {

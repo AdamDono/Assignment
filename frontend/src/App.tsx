@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ShopPage from './pages/ShopPage';
 import CartPage from './pages/CartPage';
@@ -8,10 +8,25 @@ import './index.css';
 
 type Page = 'shop' | 'cart' | 'orders';
 
+interface Toast {
+  id: number;
+  message: string;
+  type: 'success' | 'error';
+}
+
 function AppInner() {
   const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const [currentPage, setCurrentPage] = useState<Page>('shop');
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
+  }, []);
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -52,8 +67,22 @@ function AppInner() {
     setCart((prev) => prev.filter((i) => i.product.id !== productId));
   }
 
+  function handleLogout() {
+    logout();
+    showToast('You have been logged out.', 'success');
+  }
+
   return (
     <div className="app-layout">
+      {/* Toast notifications */}
+      <div className="toast-container">
+        {toasts.map((t) => (
+          <div key={t.id} className={`toast ${t.type}`}>
+            {t.message}
+          </div>
+        ))}
+      </div>
+
       <nav className="navbar">
         <span className="navbar-logo">Adams's Shop</span>
 
@@ -84,7 +113,7 @@ function AppInner() {
               <span className="user-pill">
                 {isAdmin ? '👑 Admin' : '👤'} {user?.email}
               </span>
-              <button className="logout-btn" onClick={logout}>Logout</button>
+              <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </>
           ) : (
             <span className="user-pill guest">Guest</span>
@@ -93,7 +122,7 @@ function AppInner() {
       </nav>
 
       {currentPage === 'shop' && (
-        <ShopPage cart={cart} onAddToCart={addToCart} />
+        <ShopPage cart={cart} onAddToCart={addToCart} showToast={showToast} />
       )}
       {currentPage === 'cart' && (
         <CartPage
@@ -103,6 +132,7 @@ function AppInner() {
           onRemove={removeFromCart}
           onClear={() => setCart([])}
           onCheckoutSuccess={() => setCurrentPage('orders')}
+          showToast={showToast}
         />
       )}
       {currentPage === 'orders' && <OrdersPage />}

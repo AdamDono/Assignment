@@ -5,9 +5,10 @@ import { apiLogin, apiRegister } from '../api/auth';
 interface Props {
   onClose: () => void;
   onSuccess: () => void;
+  showToast?: (message: string, type?: 'success' | 'error') => void;
 }
 
-export default function AuthModal({ onClose, onSuccess }: Props) {
+export default function AuthModal({ onClose, onSuccess, showToast }: Props) {
   const { login } = useAuth();
   const [tab, setTab] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
@@ -37,9 +38,17 @@ export default function AuthModal({ onClose, onSuccess }: Props) {
           : await apiRegister(email, password);
 
       login(res.access_token, res.user);
+      showToast?.(
+        tab === 'login'
+          ? `Welcome back, ${res.user.email}!`
+          : `Account created! Welcome, ${res.user.email}!`,
+        'success'
+      );
       onSuccess();
     } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+      const msg = err.message || 'Something went wrong';
+      setError(msg);
+      showToast?.(msg, 'error');
     } finally {
       setLoading(false);
     }

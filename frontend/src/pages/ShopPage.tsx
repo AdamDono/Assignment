@@ -8,9 +8,10 @@ import { useAuth } from '../context/AuthContext';
 interface Props {
   cart: CartItem[];
   onAddToCart: (product: Product) => void;
+  showToast: (message: string, type?: 'success' | 'error') => void;
 }
 
-export default function ShopPage({ cart, onAddToCart }: Props) {
+export default function ShopPage({ cart, onAddToCart, showToast }: Props) {
   const { isAdmin } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,14 +52,28 @@ export default function ShopPage({ cart, onAddToCart }: Props) {
       {showAddModal && (
         <ProductModal
           onClose={() => setShowAddModal(false)}
-          onSaved={() => { setShowAddModal(false); loadProducts(); }}
+          onSaved={(action) => {
+            setShowAddModal(false);
+            loadProducts();
+            if (action === 'create') {
+              showToast('Product added successfully!', 'success');
+            }
+          }}
         />
       )}
       {editProduct && (
         <ProductModal
           product={editProduct}
           onClose={() => setEditProduct(null)}
-          onSaved={() => { setEditProduct(null); loadProducts(); }}
+          onSaved={(action) => {
+            setEditProduct(null);
+            loadProducts();
+            if (action === 'update') {
+              showToast('Product updated successfully!', 'success');
+            } else if (action === 'delete') {
+              showToast('Product deleted successfully!', 'success');
+            }
+          }}
         />
       )}
 

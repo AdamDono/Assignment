@@ -11,6 +11,7 @@ interface Props {
   onRemove: (productId: number) => void;
   onClear: () => void;
   onCheckoutSuccess: () => void;
+  showToast: (message: string, type?: 'success' | 'error') => void;
 }
 
 export default function CartPage({
@@ -20,6 +21,7 @@ export default function CartPage({
   onRemove,
   onClear,
   onCheckoutSuccess,
+  showToast,
 }: Props) {
   const { isAuthenticated } = useAuth();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -45,8 +47,11 @@ export default function CartPage({
       );
       onClear();
       onCheckoutSuccess();
+      showToast('Order placed successfully!', 'success');
     } catch (err: any) {
-      setError(err.message || 'Checkout failed');
+      const msg = err.message || 'Checkout failed';
+      setError(msg);
+      showToast(msg, 'error');
     } finally {
       setIsCheckingOut(false);
     }
@@ -84,6 +89,7 @@ export default function CartPage({
         <AuthModal
           onClose={() => setShowAuthModal(false)}
           onSuccess={handleAuthSuccess}
+          showToast={showToast}
         />
       )}
 
