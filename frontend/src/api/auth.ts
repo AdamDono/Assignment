@@ -1,4 +1,4 @@
-import type { User, AuthResponse } from '../types';
+import type { AuthResponse } from '../types';
 import { getAuthHeaders } from './client';
 
 const BASE_URL = 'http://localhost:3000';

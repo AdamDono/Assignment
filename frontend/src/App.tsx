@@ -94,16 +94,16 @@ function AppInner() {
             Shop
           </button>
           <button
+            className={`nav-btn nav-cart-btn ${currentPage === 'cart' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('cart')}
+          >
+            Cart {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+          </button>
+          <button
             className={`nav-btn ${currentPage === 'orders' ? 'active' : ''}`}
             onClick={() => setCurrentPage('orders')}
           >
             Orders
-          </button>
-          <button
-            className={`nav-btn nav-cart-btn ${currentPage === 'cart' ? 'active' : ''}`}
-            onClick={() => setCurrentPage('cart')}
-          >
-            🛒 Cart {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
           </button>
         </div>
 
@@ -135,7 +135,7 @@ function AppInner() {
           showToast={showToast}
         />
       )}
-      {currentPage === 'orders' && <OrdersPage />}
+      {currentPage === 'orders' && <OrdersPage showToast={showToast} />}
     </div>
   );
 }

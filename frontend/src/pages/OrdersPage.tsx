@@ -1,18 +1,59 @@
 import { useEffect, useState } from 'react';
 import { getOrders } from '../api/client';
 import type { Order } from '../types';
+import { useAuth } from '../context/AuthContext';
+import AuthModal from '../components/AuthModal';
 
-export default function OrdersPage() {
+interface Props {
+  showToast?: (message: string, type?: 'success' | 'error') => void;
+}
+
+export default function OrdersPage({ showToast }: Props) {
+  const { isAuthenticated } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError('');
     getOrders()
       .then(setOrders)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        {showAuthModal && (
+          <AuthModal
+            onClose={() => setShowAuthModal(false)}
+            onSuccess={() => setShowAuthModal(false)}
+            showToast={showToast}
+          />
+        )}
+        <div className="cart-page-empty">
+          <div className="empty-cart-card">
+            <h2>Log in to see your orders</h2>
+            <p>You need to be signed in to view your order history.</p>
+            <button
+              className="add-btn"
+              style={{ marginTop: '20px', padding: '12px' }}
+              onClick={() => setShowAuthModal(true)}
+            >
+              Sign In &amp; Register
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (loading) return <p className="state-message">Loading orders...</p>;
   if (error) return <p className="state-message error">{error}</p>;
