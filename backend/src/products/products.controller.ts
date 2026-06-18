@@ -14,6 +14,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Public } from '../auth/public.decorator';
 
@@ -49,7 +50,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Update a product (admin only)' })
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: Partial<CreateProductDto>,
+    @Body() dto: UpdateProductDto,
     @Request() req: any,
   ) {
     if (req.user?.role !== 'admin') throw new ForbiddenException('Admins only');

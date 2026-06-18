@@ -17,6 +17,7 @@ async function bootstrap() {
     .setTitle('Shopping Cart API')
     .setDescription('API for the shopping cart assignment')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
